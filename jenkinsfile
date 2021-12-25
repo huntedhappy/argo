@@ -1,52 +1,45 @@
 pipeline {
-    environment {
-        // the address of your harbor registry
-        REGISTRY = 'https://harbor.tkg.io'
-        // the project name
-        // make sure your robot account have enough access to the project
-        HARBOR_PROJECTS = 'library'
-        // docker image name
-        APP_NAME = 'docker-example'
-        // ‘robot-test’ is the credential ID you created on the KubeSphere console
-        HARBOR_CREDENTIAL = 'dockerhub'
-        // which is git hub docker file 
-        dockerfile = 'nginx/backend/Dockerfile'
+  environment {
+    // the address of your harbor registry
+    REGISTRY = 'https://harbor.tkg.io'
+    // the project name
+    // make sure your robot account have enough access to the project
+    HARBOR_PROJECTS = 'library'
+    // docker image name
+    APP_NAME = 'docker-example'
+    // ‘robot-test’ is the credential ID you created on the KubeSphere console
+    HARBOR_CREDENTIAL = 'dockerhub'
+    // which is git hub docker file 
+    dockerfile = 'nginx/backend/Dockerfile'
+  }
+  agent any
+  stages {
+    stage('Cloning Git') {
+      steps{
+        checkout scm
+      }
     }
-    agent any
-    stages {
-        stage('Cloning Git') {
-            steps{
-                checkout scm
-            }
+    stage('Building Docker Image') {
+      steps{
+        script {
+          dockerImage = docker.build("$HARBOR_PROJECTS/$APP_NAME", "-f $dockerfile .")
         }
-        stage('Building Docker Image') {
-            steps{
-                script {
-                    dockerImage = docker.build("$HARBOR_PROJECTS/$APP_NAME:$BUILD_NUMBER", "-f $dockerfile .")
-                }
-            }
-        }
-        stage("install helm in Docker"){
-            steps {
-                sh 'whoami'
-            }
-        }	
-        stage('PUSH PRIVATE HARBOR') {
-            steps {
-                script {      
-                    docker.withRegistry ('https://harbor.tkg.io', HARBOR_CREDENTIAL) {
-                    dockerImage.push()
-                    dockerImage.push('${BUILD_NUMBER}')
-                    }
-                } 
-            }
-        }
-        stage('chage manifest') {
-          steps{
-            script {
-              sh "sed 's/docker-example:0.0.2/docker-example:${BUILD_NUMBER}/' /var/tmp/argo/nginx1.yaml"
-            }
+      }
+    }
+    stage("install helm in Docker"){
+      steps {
+          sh 'whoami'
+      }
+    }	
+    stage('PUSH PRIVATE HARBOR') {
+      steps {
+        script {      
+          docker.withRegistry ('https://harbor.tkg.io', HARBOR_CREDENTIAL) {
+          dockerImage.push('${BUILD_NUMBER}')
+          dockerImage.push("latest")
           }
-        }
+        } 
+      }
     }
+  }
 }
