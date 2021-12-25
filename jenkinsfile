@@ -55,6 +55,7 @@ pipeline {
         sh('''
           git config user.name 'huntedhappy'
           git config user.email 'huntedhappy@gmail.com'
+          git commit -m 'nginx'
         ''')
         
         sshagent(['root']) {
