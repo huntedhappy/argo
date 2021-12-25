@@ -45,9 +45,8 @@ pipeline {
       steps {
         script {      
           sh 'cd /var/tmp/argo && sh rollout.sh ${BUILD_NUMBER}'
-          }
-        } 
-      }
-    }    
-  }
+        }
+      } 
+    }
+  }    
 }
