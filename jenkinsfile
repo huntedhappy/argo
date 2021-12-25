@@ -11,8 +11,6 @@ pipeline {
     HARBOR_CREDENTIAL = 'dockerhub'
     // which is git hub docker file 
     dockerfile = 'nginx/backend/Dockerfile'
-    // git check
-    SCM_VARS = git branch: 'main', url: 'https://github.com/huntedhappy/argo.git'
   }
   agent any
   stages {
@@ -53,6 +51,7 @@ pipeline {
     stage('Check File change') {
       steps {
         script {          
+          SCM_VARS = git branch: 'main', url: 'https://github.com/huntedhappy/argo.git'
           CHANGE = sh(script: "git diff ${SCM_VARS.GIT_PREVIOUS_SUCCESSFUL_COMMIT} ${SCM_VARS.GIT_COMMIT} nginx1.yaml", returnStdout: true)
           sh '$CHANGE'
           if (CHANGE.length() > 0) { 
