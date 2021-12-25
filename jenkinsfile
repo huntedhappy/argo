@@ -51,6 +51,10 @@ pipeline {
       } 
     }
     stage('Check File change') {
+      when { branch 'main' }
+        environment { 
+          GIT_TAG = "jenkins-$BUILD_NUMBER"
+        }      
       steps {
         sh('''
           git config user.name 'huntedhappy'
