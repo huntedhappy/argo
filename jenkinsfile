@@ -34,7 +34,7 @@ pipeline {
         stage('PUSH PRIVATE HARBOR') {
             steps {
                 script {      
-                    docker.withRegistry ('$REGISTRY', HARBOR_CREDENTIAL) {
+                    docker.withRegistry ('https://harbor.tkg.io', HARBOR_CREDENTIAL) {
                     dockerImage.push()
                     dockerImage.push('${BUILD_NUMBER}')
                     }
