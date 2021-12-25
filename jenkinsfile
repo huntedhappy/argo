@@ -13,16 +13,30 @@ pipeline {
     dockerfile = 'nginx/backend/Dockerfile'
   }
   agent any
+  parameters {
+    imageTag(name: 'DOCKER_IMAGE', description: '',
+             image: 'jenkins/jenkins', filter: 'lts.*', defaultTag: 'lts-jdk11',
+             registry: 'https://harbor.tkg.io', credentialId: '', tagOrder: 'NATURAL')
+  }
   stages {
     stage('Cloning Git') {
       steps{
         checkout scm
       }
     }
+    stages {
+      stage('Test') {
+        steps {
+          echo "$DOCKER_IMAGE" // will print selected image name with tag (eg. jenkins/jenkins:lts-jdk11)
+          echo "$DOCKER_IMAGE_TAG" // will print selected tag value (eg. lts-jdk11)
+          echo "$DOCKER_IMAGE_IMAGE" // will print selected image name value (eg. jenkins/jenkins)
+        }
+      }
+    }    
     stage('Building Docker Image') {
       steps{
         script {
-          dockerImage = docker.build("$HARBOR_PROJECTS/$APP_NAME", "-f $dockerfile .")
+          dockerImage = docker.build("$DOCKER_IMAGE", "-f $dockerfile .")
         }
       }
     }
@@ -35,7 +49,7 @@ pipeline {
       steps {
         script {      
           docker.withRegistry ('https://harbor.tkg.io', HARBOR_CREDENTIAL) {
-          dockerImage.push('${BUILD_NUMBER}')
+          dockerImage.push('${DOCKER_IMAGE_TAG}')
           dockerImage.push("latest")
           }
         } 
