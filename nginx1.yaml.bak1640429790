@@ -18,7 +18,7 @@ spec:
         app: nginx1
     spec:
       containers:
-      - image: harbor.tkg.io/library/docker-example:0.0.8
+      - image: harbor.tkg.io/library/docker-example:0.0.7
         name: docker-example
         resources: {}
 status: {}
