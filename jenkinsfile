@@ -22,7 +22,7 @@ pipeline {
         stage('Building Docker Image') {
             steps{
                 script {
-                    dockerImage = docker.build("-f nginx/backend/Dockerfile .") HARBOR_PROJECTS/HARBOR_PROJECTS + ":$BUILD_NUMBER"
+                    dockerImage = docker.build("-f nginx/backend/Dockerfile -t "$HARBOR_PROJECTS+\/$HARBOR_PROJECTS" .")  + ":$BUILD_NUMBER"
                 }
             }
         }
