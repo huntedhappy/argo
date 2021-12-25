@@ -1,7 +1,5 @@
 pipeline {
     environment {
-        registry = "library/my-image"
-        dockerImage = ''
         // the address of your harbor registry
         REGISTRY = 'https://harbor.tkg.io'
         // the project name
@@ -10,7 +8,8 @@ pipeline {
         // docker image name
         APP_NAME = 'docker-example'
         // ‘robot-test’ is the credential ID you created on the KubeSphere console
-        HARBOR_CREDENTIAL = credentials('dockerhub')
+        HARBOR_CREDENTIAL = 'dockerhub'
+        // which is git hub docker file 
         dockerfile = 'nginx/backend/Dockerfile'
     }
     agent any
@@ -35,7 +34,7 @@ pipeline {
         stage('PUSH PRIVATE HARBOR') {
             steps {
                 script {      
-                  docker.withRegistry ('https://harbor.tkg.io', HARBOR_CREDENTIAL) {
+                  docker.withRegistry ($REGISTRY, HARBOR_CREDENTIAL) {
                     dockerImage.push()
                     dockerImage.push('${BUILD_NUMBER}')
                     }
