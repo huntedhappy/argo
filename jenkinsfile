@@ -1,40 +1,45 @@
-pipeline {  
-  agent {
-    node {
-      label 'maven'
+pipeline {
+    environment {
+        registry = "library/my-image"
+        dockerImage = ''
+        // the address of your harbor registry
+        REGISTRY = 'https://harbor.tkg.io'
+        // the project name
+        // make sure your robot account have enough access to the project
+        HARBOR_PROJECTS = 'library'
+        // docker image name
+        APP_NAME = 'docker-example'
+        // ‘robot-test’ is the credential ID you created on the KubeSphere console
+        HARBOR_CREDENTIAL = credentials('dockerhub')        
     }
-  }
-     
-  environment {
-    // the address of your harbor registry
-    REGISTRY = 'harbor.tkg.io'
-    // the project name
-    // make sure your robot account have enough access to the project
-    HARBOR_NAMESPACE = 'library'
-    // docker image name
-    APP_NAME = 'docker-example'
-    // ‘robot-test’ is the credential ID you created on the KubeSphere console
-    HARBOR_CREDENTIAL = credentials('dockerhub')
-  }
-     
-  stages {
-    stage('docker login') {
-      steps{
-        container ('maven') {
-          // replace the Docker Hub username behind -u and do not forget ''. You can also use a Docker Hub token. 
-          sh '''echo $HARBOR_CREDENTIAL_PSW | docker login $REGISTRY -u 'robot$robot-test' --password-stdin'''
+    agent any
+    stages {
+        stage('Cloning Git') {
+            steps{
+                checkout scm
             }
-          }  
         }
-           
-    stage('build & push') {
-      steps {
-        container ('maven') {
-          sh 'git clone https://github.com/kstaken/dockerfile-examples.git'
-          sh 'cd dockerfile-examples/rethinkdb && docker build -t $REGISTRY/$HARBOR_NAMESPACE/$APP_NAME:devops-test .'
-          sh 'docker push  $REGISTRY/$HARBOR_NAMESPACE/$APP_NAME:devops-test'
-          }
+        stage('Building Docker Image') {
+            steps{
+                script {
+                    dockerImage = docker.build HARBOR_PROJECTS/HARBOR_PROJECTS + ":$BUILD_NUMBER"
+                }
+            }
         }
-      }
+        stage("install helm in Docker"){
+            steps {
+                sh 'whoami'
+            }
+        }	
+        stage('PUSH PRIVATE HARBOR') {
+            steps {
+                script {      
+                  docker.withRegistry ('https://harbor.tkg.io', HARBOR_CREDENTIAL) {
+                    dockerImage.push()
+                    dockerImage.push('${BUILD_NUMBER}')
+                    }
+                } 
+            }
+        }
     }
-  }
+}
