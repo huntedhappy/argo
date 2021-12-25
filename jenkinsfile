@@ -23,7 +23,7 @@ pipeline {
         stage('Building Docker Image') {
             steps{
                 script {
-                    dockerImage = docker.build("$HARBOR_PROJECTS:$APP_NAME:$BUILD_NUMBER", "-f $dockerfile .")
+                    dockerImage = docker.build("$HARBOR_PROJECTS:$APP_NAME:$BUILD_NUMBER")
                 }
             }
         }
