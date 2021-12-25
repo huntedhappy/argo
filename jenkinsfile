@@ -11,6 +11,8 @@ pipeline {
     HARBOR_CREDENTIAL = 'dockerhub'
     // which is git hub docker file 
     dockerfile = 'nginx/backend/Dockerfile'
+    
+    GIT_AUTH = credentials('188e20e1-dfca-4b98-98c4-734b0732c528')    
   }
   agent any
   stages {
@@ -49,14 +51,11 @@ pipeline {
       } 
     }
     stage('Check File change') {
-      when {
-        changeset "/var/tmp/argo/*"
-      }
       steps {
-        sh "echo change"
-      }
-      steps {
-        sh "echo not change"
+      sh('''
+        git config --local credential.helper "!f() { echo username=\\$GIT_AUTH_USR; echo password=\\$GIT_AUTH_PSW; }; f"
+        git push origin HEAD:$TARGET_BRANCH
+      ''')
       }
     }
   }    
