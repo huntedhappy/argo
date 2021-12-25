@@ -41,5 +41,12 @@ pipeline {
                 } 
             }
         }
+        stage('chage manifest') {
+          steps{
+            script {
+              sh "sed ''s/docker-example:0.0.2/docker-example:${BUILD_NUMBER}/' /var/tmp/argo/nginx1.yaml"
+            }
+          }
+        }
     }
 }
