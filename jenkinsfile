@@ -62,7 +62,7 @@ pipeline {
           if (CHANGE.length() > 0) { 
             sh "cd /var/tmp/argo"
             sh "git add nginx1.yaml"
-            sh "git commit -m 'manifest chage"
+            sh "git commit -m 'manifest chage'"
             sh "git push origin main"
             sh "echo 'nginx1.yaml is change'"
           }
