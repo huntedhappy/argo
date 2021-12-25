@@ -11,6 +11,3 @@ echo "new version is: "${newversion}
 
 ##tihuan jingxiangbanben
 sed -i.bak${job_number} 's/'"${oldversion}"'/'"${newversion}"'/g' nginx1.yaml
-
-##zhixing shengjibanben
-kubectl apply -f nginx1.yaml --record=true
