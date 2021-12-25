@@ -53,7 +53,7 @@ pipeline {
         script {          
           SCM_VARS = git branch: 'main', url: 'https://github.com/huntedhappy/argo.git'
           CHANGE = sh(script: "git diff ${SCM_VARS.GIT_PREVIOUS_SUCCESSFUL_COMMIT} ${SCM_VARS.GIT_COMMIT} nginx1.yaml", returnStdout: true)
-          sh '$CHANGE'
+          sh 'echo $CHANGE'
           if (CHANGE.length() > 0) { 
             sh 'cd /var/tmp/argo'
             sh 'git add nginx1.yaml'
