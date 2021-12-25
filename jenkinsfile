@@ -50,7 +50,7 @@ pipeline {
     }
     stage('Check File change') {
       when {
-        changeset "argo/*"
+        changeset "/var/tmp/argo/*"
       }
       steps {
         sh "echo change"
