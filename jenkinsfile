@@ -53,9 +53,18 @@ pipeline {
     stage('Check File change') {
       steps {
         sh('''
-          git config --local credential.helper "!f() { echo username=\\$GIT_AUTH_USR; echo password=\\$GIT_AUTH_PSW; }; f"
-          git push origin main
+          git config user.name 'huntedhappy'
+          git config user.email 'huntedhappy@gmail.com'
         ''')
+        
+        sshagent(['root']) {
+          sh("""
+            #!/usr/bin/env bash
+            set +x
+            export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+            git push origin main
+           """)
+        }
       }
     }
   }    
