@@ -11,7 +11,7 @@ pipeline {
         APP_NAME = 'docker-example'
         // ‘robot-test’ is the credential ID you created on the KubeSphere console
         HARBOR_CREDENTIAL = credentials('dockerhub')
-        dockerfile = nginx\backend\Dockerfile
+        dockerfile = nginx/backend/Dockerfile
     }
     agent any
     stages {
@@ -23,7 +23,7 @@ pipeline {
         stage('Building Docker Image') {
             steps{
                 script {
-                    dockerImage = docker.build("$HARBOR_PROJECTS:$APP_NAME", "-f $dockerfile ./dockerfiles") + ":$BUILD_NUMBER"
+                    dockerImage = docker.build("$HARBOR_PROJECTS:$APP_NAME", "-f $dockerfile .") + ":$BUILD_NUMBER"
                 }
             }
         }
