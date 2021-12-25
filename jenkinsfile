@@ -65,7 +65,6 @@ pipeline {
           sh("""
             #!/usr/bin/env bash
             set +x
-            export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
             git remote rm origin
             git remote add origin git@github.com:huntedhappy/argo.git
             git push origin \$GIT_TAG
