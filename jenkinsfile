@@ -1,85 +1,40 @@
-podTemplate(label: 'docker-build',
-  containers: [
-    containerTemplate(
-      name: 'docker',
-      image: 'docker',
-      command: 'cat',
-      ttyEnabled: true
-    ),
-    containerTemplate(
-      name: 'argo',
-      image: 'argoproj/argo-cd-ci-builder:latest',
-      command: 'cat',
-      ttyEnabled: true
-    ),
-  ],
-  volumes: [ 
-    hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'), 
-  ]
-) {
-    node('docker-build') {
-        def dockerHubCred = "dockerhub"
-        def appImage
-        
-        stage('Checkout'){
-            container('argo'){
-                checkout scm
+pipeline {  
+  agent {
+    node {
+      label 'maven'
+    }
+  }
+     
+  environment {
+    // the address of your harbor registry
+    REGISTRY = 'harbor.tkg.io'
+    // the project name
+    // make sure your robot account have enough access to the project
+    HARBOR_NAMESPACE = 'library'
+    // docker image name
+    APP_NAME = 'docker-example'
+    // ‘robot-test’ is the credential ID you created on the KubeSphere console
+    HARBOR_CREDENTIAL = credentials('dockerhub')
+  }
+     
+  stages {
+    stage('docker login') {
+      steps{
+        container ('maven') {
+          // replace the Docker Hub username behind -u and do not forget ''. You can also use a Docker Hub token. 
+          sh '''echo $HARBOR_CREDENTIAL_PSW | docker login $REGISTRY -u 'robot$robot-test' --password-stdin'''
             }
+          }  
         }
-        
-        stage('Build'){
-            container('docker'){
-                script {
-                    appImage = docker.build("library/node-hello-world")
-                }
-            }
+           
+    stage('build & push') {
+      steps {
+        container ('maven') {
+          sh 'git clone https://github.com/kstaken/dockerfile-examples.git'
+          sh 'cd dockerfile-examples/rethinkdb && docker build -t $REGISTRY/$HARBOR_NAMESPACE/$APP_NAME:devops-test .'
+          sh 'docker push  $REGISTRY/$HARBOR_NAMESPACE/$APP_NAME:devops-test'
+          }
         }
-        
-        stage('Test'){
-            container('docker'){
-                script {
-                    appImage.inside {
-                        sh 'npm install'
-                        sh 'npm test'
-                    }
-                }
-            }
-        }
-
-        stage('Push'){
-            container('docker'){
-                script {
-                    docker.withRegistry('https://harbor.tkg.io', dockerHubCred){
-                        appImage.push("${env.BUILD_NUMBER}")
-                        appImage.push("latest")
-                    }
-                }
-            }
-        }
-
-        stage('Deploy'){
-            container('argo'){
-                checkout([$class: 'GitSCM',
-                        branches: [[name: '*/main' ]],
-                        extensions: scm.extensions,
-                        userRemoteConfigs: [[
-                            url: 'git@github.com:huntedhappy/argo.git',
-                            credentialsId: 'root',
-                        ]]
-                ])
-                sshagent(credentials: ['root']){
-                    sh("""
-                        #!/usr/bin/env bash
-                        set +x
-                        export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
-                        git config --global user.email "huntedhappy@gmail.com"
-                        git checkout main
-                        cd env/dev && kustomize edit set image arm7tdmi/node-hello-world:${BUILD_NUMBER}
-                        git commit -a -m "updated the image tag"
-                        git push
-                    """)
-                }
-            }
-        }
-    } 
-}
+      }
+    }
+  }
