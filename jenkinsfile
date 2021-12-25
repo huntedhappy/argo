@@ -49,13 +49,17 @@ pipeline {
       } 
     }
     stage('Git Clone') { 
-      SCM_VARS = git branch: 'main', url: 'https://github.com/huntedhappy/argo.git' 
+      steps {
+        SCM_VARS = git branch: 'main', url: 'https://github.com/huntedhappy/argo.git' 
+      }
     }
     stage('Check File change') {
-      def CHANGE = sh(script: "git diff ${SCM_VARS.GIT_PREVIOUS_SUCCESSFUL_COMMIT} ${SCM_VARS.GIT_COMMIT} nginx1.yaml", returnStdout: true)
-      script { 
-        if (CHANGE.length() > 0) { 
-          sh "echo 'nginx1.yaml is change'"
+      steps {
+        def CHANGE = sh(script: "git diff ${SCM_VARS.GIT_PREVIOUS_SUCCESSFUL_COMMIT} ${SCM_VARS.GIT_COMMIT} nginx1.yaml", returnStdout: true)
+        script { 
+          if (CHANGE.length() > 0) { 
+            sh "echo 'nginx1.yaml is change'"
+          }
     	  } 
       } 
     }
