@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  notifications.argoproj.io/subscribe.on-sync-succeeded.slack: dk-devops
+  notifications.argoproj.io/subscribe.on-sync-failed: dk-devops
+  creationTimestamp: null
+  labels:
+    app: nginx1
+  name: nginx1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nginx1
+    spec:
+      containers:
+      - image: harbor.tkg.io/library/docker-example:74
+        name: docker-example
+        resources: {}
+status: {}
+
