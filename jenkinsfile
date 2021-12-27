@@ -9,6 +9,7 @@ pipeline {
     APP_NAME = 'docker-example'
     // ‘robot-test’ is the credential ID you created on the KubeSphere console
     HARBOR_CREDENTIAL = 'dockerhub'
+    JOB_NAME = 'jenkins integration argo'
     // which is git hub docker file 
     dockerfile = 'nginx/backend/Dockerfile'
     
@@ -20,6 +21,12 @@ pipeline {
       steps{
         checkout scm
       }
+    }
+    stage('Start') {
+        agent any
+        steps {
+            slackSend (channel: '#dk-devops', color: '#FFFF00', message: "STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'")
+        }
     }
     stage('Building Docker Image') {
       steps{
@@ -74,5 +81,13 @@ pipeline {
         }
       }
     }
+  }
+  post {
+      success {
+          slackSend (channel: '#dk-devops', color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'")
+      }
+      failure {
+          slackSend (channel: '#dk-devops', color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'")
+      }
   }    
 }
