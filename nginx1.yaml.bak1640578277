@@ -1,7 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  notifications.argoproj.io/subscribe.on-sync-succeeded.slack: dk-devops
   creationTimestamp: null
   labels:
     app: nginx1
@@ -19,7 +18,7 @@ spec:
         app: nginx1
     spec:
       containers:
-      - image: harbor.tkg.io/library/docker-example:74
+      - image: harbor.tkg.io/library/docker-example:0.0.24
         name: docker-example
         resources: {}
 status: {}
