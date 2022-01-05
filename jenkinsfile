@@ -73,8 +73,8 @@ pipeline {
           git tag -a \$GIT_TAG -m "[Jenkins CI] New Tag"
         ''')
 
-        sshagent(['root']) {
-          sh("""
+        sshagent(credentials: ['${GIT_SSH}']) {
+          sh '''
             #!/usr/bin/env bash
             set +x
             git remote rm origin
@@ -82,7 +82,7 @@ pipeline {
             git push origin \$GIT_TAG
             echo *.bak* >> .gitignore
             git clean -f -d -x
-           """)
+           '''
         }
       }
     }
