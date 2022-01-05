@@ -79,7 +79,7 @@ pipeline {
             set +x
             git push origin \$GIT_TAG
             echo *.bak* >> .gitignore
-            git clean -f -d -x
+            git clean -fdx
            """)
         }
       }
