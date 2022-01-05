@@ -74,7 +74,7 @@ pipeline {
         ''')
 
         sshagent(['root']) {
-          sh('''
+          sh("""
             #!/usr/bin/env bash
             set +x
             git remote rm origin
@@ -82,7 +82,7 @@ pipeline {
             git push origin \$GIT_TAG
             echo *.bak* >> .gitignore
             git clean -f -d -x
-           ''')
+           """)
         }
       }
     }
