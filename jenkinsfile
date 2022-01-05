@@ -68,14 +68,14 @@ pipeline {
       }      
       steps {
         script {
-          sh('git remote rm origin')
-          sh('git remote add origin git@github.com:huntedhappy/argo.git')
-          sh("git config user.name 'huntedhappy'")
-          sh("git config user.email 'huntedhappy@gmail.com'")
-          sh("git tag -a $GIT_TAG -m '[Jenkins CI] New Tag'")
-          sh("git push origin $GIT_TAG")
-          sh("echo *.bak* >> .gitignore")
-          sh("git clean -fdx")
+          sh 'git remote rm origin'
+          sh 'git remote add origin git@github.com:huntedhappy/argo.git'
+          sh "git config user.name 'huntedhappy'"
+          sh "git config user.email 'huntedhappy@gmail.com'"
+          sh "git tag -a $GIT_TAG -m '[Jenkins CI] New Tag'"
+          sh 'git push origin $GIT_TAG'
+          sh 'echo *.bak* >> .gitignore'
+          sh 'git clean -fdx'
         }
       }
     }
