@@ -73,7 +73,9 @@ pipeline {
           sh "git config user.name 'huntedhappy'"
           sh "git config user.email 'huntedhappy@gmail.com'"
           sh "git tag -a $GIT_TAG -m '[Jenkins CI] New Tag'"
-          sh "git push origin $GIT_TAG"
+          sh "git add ."
+          sh "git commit -m '[Jenkins CI] New Tag'"
+          sh "git push origin main"
           sh 'echo *.bak* >> .gitignore'
           sh 'git clean -fdx'
         }
