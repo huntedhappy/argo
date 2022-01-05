@@ -86,7 +86,7 @@ pipeline {
           sh 'upload'
           sh '''
             git add *
-            git commit -m '[Jenkins CI] + $BUILD_NUMBER' 
+            git commit -m '[Jenkins CI] + ${BUILD_NUMBER}' 
             git push origin main
             echo *.bak* >> .gitignore
             git clean -f -d -x                
