@@ -83,7 +83,11 @@ pipeline {
     stage('Git Uploades') {
       steps {
         script {
-          sh 'git clean -fdx'
+          sh '''
+            git add *
+            git commit -m '[Jenkins CI ${BUILD_NUMBER}'
+            git origin main
+           '''
         }
       }
     }
