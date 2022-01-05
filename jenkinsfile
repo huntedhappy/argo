@@ -69,6 +69,7 @@ pipeline {
       steps {
         script {
           sh"git config --global user.email 'huntedhappy@gmail.com' && git config --global user.name 'huntedhappy'"
+          sh"git branch temp && git checkout temp && git branch -f main temp && git checkout main && git branch -d temp"
           sh"git add . && git commit -am argo && git push origin main"
         }
       }
