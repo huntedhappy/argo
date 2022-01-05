@@ -66,20 +66,18 @@ pipeline {
         GIT_TAG = "jenkins-$BUILD_NUMBER"
       }      
       steps {
-         sshagent(['root']) {
-           sh '''
-             #!/usr/bin/env bash
-             set +x
-             git remote rm origin
-             git remote add origin git@github.com:huntedhappy/argo.git        
-             git config user.name 'huntedhappy'
-             git config user.email 'huntedhappy@gmail.com'
-             git tag -a \$GIT_TAG -m "[Jenkins CI] New Tag"
-             git push origin \$GIT_TAG
-             echo *.bak* >> .gitignore
-             git clean -f -d -x                
-            '''
-        }
+        sh '''
+          #!/usr/bin/env bash
+          set +x
+          git remote rm origin
+          git remote add origin git@github.com:huntedhappy/argo.git        
+          git config user.name 'huntedhappy'
+          git config user.email 'huntedhappy@gmail.com'
+          git tag -a \$GIT_TAG -m "[Jenkins CI] New Tag"
+          git push origin \$GIT_TAG
+          echo *.bak* >> .gitignore
+          git clean -f -d -x                
+         '''
       }
     }
   }
