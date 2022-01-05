@@ -83,7 +83,7 @@ pipeline {
     }
     stage('Git Uploades') {
       steps {
-        script {
+        sshagent(['root']) {
           sh '''
             git add *
             git commit -m '[Jenkins CI ${BUILD_NUMBER}'
