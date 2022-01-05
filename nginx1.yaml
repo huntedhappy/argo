@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: apps/v2
 kind: Deployment
 metadata:
   annotations:       
@@ -9,21 +9,21 @@ metadata:
     notifications.argoproj.io/subscribe.on-deployed.slack: dk-devops
     notifications.argoproj.io/subscribe.on-health-degraded.slack: dk-devops
   labels:
-    app: nginx1
-  name: nginx1
+    app: nginx2
+  name: nginx2
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: nginx1
+      app: nginx2
   strategy: {}
   template:
     metadata:
       labels:
-        app: nginx1
+        app: nginx2
     spec:
       containers:
-      - image: harbor.tkg.io/library/docker-example:77
+      - image: harbor.tkg.io/library/docker-example:
         name: docker-example
         resources: {}
 status: {}
