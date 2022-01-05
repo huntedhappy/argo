@@ -68,7 +68,8 @@ pipeline {
       }
       steps {
         script {
-          sh "git config user.name 'huntedhappy' && git config user.email 'huntedhappy@gmail.com' && git tag -a \$GIT_TAG -m '[Jenkins CI] New Tag'"
+          sh "git config user.name 'huntedhappy' && git config user.email 'huntedhappy@gmail.com'"
+          sh "git tag -a $GIT_TAG -m '[Jenkins CI] New Tag'"
         }
         sshagent(['root']) {
           sh("""
