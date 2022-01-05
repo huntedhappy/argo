@@ -1,0 +1,11 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: argo-test-httpproxy
+spec:
+  virtualhost:
+    fqdn: nginx-test.tkg.io
+  routes:
+    - services:
+        - name: nginx1
+          port: 80
