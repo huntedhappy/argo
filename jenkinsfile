@@ -65,7 +65,7 @@ pipeline {
     stage('Check File change') {
       steps {
         script {
-          sh 'cd /var/tmp/argo && sh Git gitupload.sh'
+          sh 'cd /var/tmp/argo && sh Git gitupload.sh ${BUILD_NUMBER}'
         }
       }
     }
