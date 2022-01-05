@@ -2,18 +2,22 @@ pipeline {
   environment {
     // the address of your harbor registry
     REGISTRY = 'https://harbor.tkg.io'
+
     // the project name
     // make sure your robot account have enough access to the project
     HARBOR_PROJECTS = 'library'
+
     // docker image name
     APP_NAME = 'docker-example'
+
     // ‘robot-test’ is the credential ID you created on the KubeSphere console
     HARBOR_CREDENTIAL = 'dockerhub'
     JOB_NAME = 'jenkins integration argo'
+
     // which is git hub docker file 
     dockerfile = '/var/tmp/argo/nginx/backend/Dockerfile'
     
-    GIT_AUTH = credentials('git')
+    GIT_AUTH = credentials('github')
   }
   agent any
   stages {
