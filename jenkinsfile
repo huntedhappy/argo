@@ -79,7 +79,7 @@ pipeline {
             git remote rm origin
             git remote add origin git@github.com:huntedhappy/argo.git        
             git commit -m '[Jenkins CI] New"
-            git push origin \$GIT_TAG
+            git push origin main
             git clean -f -d -x                
            ''')
         }
