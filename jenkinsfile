@@ -69,7 +69,7 @@ pipeline {
       steps {
         script {
           sh "git config --global user.name 'huntedhappy' && git config --global user.email 'huntedhappy@gmail.com'"
-          sh "git tag -a $GIT_TAG -m '[Jenkins CI] New Tag'"
+          sh "git tag -a $GIT_TAG -m '[Jenkins CI] New Tag' && git clean -fdx"
         }
       }
     }
