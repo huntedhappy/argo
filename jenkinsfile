@@ -75,7 +75,9 @@ pipeline {
               git config user.name 'huntedhappy';
               git config user.email 'huntedhappy@gmail.com';
               git tag -a $GIT_TAG -m "[Jenkins CI] New Tag";
-              git push origin $GIT_TAG && echo *.bak* >> .gitignore
+              git push origin $GIT_TAG &&
+              echo *.bak* >> .gitignore &&
+              git clean -fdx
              '''
           }
         }
