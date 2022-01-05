@@ -69,8 +69,8 @@ pipeline {
       steps {
         script {
           sh('''
-            git config user.name 'huntedhappy'
-            git config user.email 'huntedhappy@gmail.com'
+            git config user.name 'huntedhappy';
+            git config user.email 'huntedhappy@gmail.com';;
             git tag -a \$GIT_TAG -m "[Jenkins CI] New Tag"
           ''')
         }
