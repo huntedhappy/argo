@@ -11,7 +11,7 @@ pipeline {
     HARBOR_CREDENTIAL = 'dockerhub'
     JOB_NAME = 'jenkins integration argo'
     // which is git hub docker file 
-    dockerfile = 'nginx/backend/Dockerfile'
+    dockerfile = '/var/tmp/argo/nginx/backend/Dockerfile'
     
     GIT_AUTH = credentials('git')
   }
