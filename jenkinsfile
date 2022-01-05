@@ -18,6 +18,7 @@ pipeline {
     dockerfile = '/var/tmp/argo/nginx/backend/Dockerfile'
     
     GIT_AUTH = credentials('github')
+    GIT_SSH = credentials('root')
   }
   agent any
   stages {
@@ -67,19 +68,14 @@ pipeline {
       }      
       steps {
         script {
-          try {
-            sh '''
-              set +x;
-              git remote rm origin;
-              git remote add origin git@github.com:huntedhappy/argo.git;
-              git config user.name 'huntedhappy';
-              git config user.email 'huntedhappy@gmail.com';
-              git tag -a $GIT_TAG -m "[Jenkins CI] New Tag";
-              git push origin $GIT_TAG &&
-              echo *.bak* >> .gitignore &&
-              git clean -fdx
-             '''
-          }
+          sh('git remote rm origin')
+          sh('git remote add origin git@github.com:huntedhappy/argo.git')
+          sh("git config user.name 'huntedhappy'")
+          sh("git config user.email 'huntedhappy@gmail.com'")
+          sh("git tag -a $GIT_TAG -m '[Jenkins CI] New Tag'")
+          sh("git push origin $GIT_TAG")
+          sh("echo *.bak* >> .gitignore")
+          sh("git clean -fdx")
         }
       }
     }
