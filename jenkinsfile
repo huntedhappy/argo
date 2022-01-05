@@ -13,7 +13,7 @@ pipeline {
     // which is git hub docker file 
     dockerfile = 'nginx/backend/Dockerfile'
     
-    GIT_AUTH = credentials('188e20e1-dfca-4b98-98c4-734b0732c528')    
+    GIT_AUTH = credentials('git')
   }
   agent any
   stages {
