@@ -83,9 +83,9 @@ pipeline {
       steps {
         sshagent(['root']) {
           sh '''
-            git add *
-            git commit -m '[Jenkins CI ${BUILD_NUMBER}'
-            git origin main
+            git add * &&
+            git commit -m '[Jenkins CI ${BUILD_NUMBER}' &&
+            git push origin main
            '''
         }
       }
