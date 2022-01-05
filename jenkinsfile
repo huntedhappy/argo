@@ -63,15 +63,9 @@ pipeline {
       } 
     }
     stage('Check File change') {
-      environment { 
-        GIT_TAG = "jenkins-$BUILD_NUMBER"
-      }      
       steps {
         script {
-          sh"git config --global user.email 'huntedhappy@gmail.com' && git config --global user.name 'huntedhappy'"
-          sh"git branch temp && git checkout temp && git branch -f main temp && git checkout main && git branch -d temp"
-          sh"echo *.bak* >> .gitignore && git clean -fdx"
-          sh"git add . && git commit -m argo && git push origin main"
+          sh 'cd /var/tmp/argo && sh Git gitupload.sh'
         }
       }
     }
