@@ -73,8 +73,11 @@ pipeline {
           git remote add origin git@github.com:huntedhappy/argo.git        
           git config user.name 'huntedhappy'
           git config user.email 'huntedhappy@gmail.com'
-          git tag -a \$GIT_TAG -m "[Jenkins CI] New Tag"
-          git push origin \$GIT_TAG
+          git tag -a $GIT_TAG -m "[Jenkins CI] New Tag"
+          git push origin $GIT_TAG
+          git add *
+          git commit -m '[Jenkins CI] + $BUILD_NUMBER' 
+          git push origin main
           echo *.bak* >> .gitignore
           git clean -f -d -x                
          '''
