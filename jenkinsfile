@@ -69,7 +69,7 @@ pipeline {
       steps {
         script {
           withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'git-tool')]) {
-          sh "git add . && git checkout main && git merge origin/main && git commit -am 'argo' && git push origin main"
+          sh "git add . && git checkout main && git merge origin/main && git commit -am 'argo' && git push origin +main"
           }
         }
       }
