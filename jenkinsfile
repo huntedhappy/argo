@@ -94,13 +94,13 @@ pipeline {
         }
       }
     }
-    post {
-      success {
-        slackSend (channel: '#dk-devops', color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'")
-      }
-        failure {
-          slackSend (channel: '#dk-devops', color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'")
-      }
-    }    
   }
+  post {
+    success {
+      slackSend (channel: '#dk-devops', color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'")
+    }
+      failure {
+        slackSend (channel: '#dk-devops', color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'")
+    }
+  }    
 }
