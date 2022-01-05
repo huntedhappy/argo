@@ -68,7 +68,7 @@ pipeline {
           git tag -a \$GIT_TAG -m "[Jenkins CI] New Tag"
         ''')
         
-        sshagent(['ubuntu']) {
+        sshagent(['root']) {
           sh("""
             #!/usr/bin/env bash
             set +x
