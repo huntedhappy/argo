@@ -82,6 +82,7 @@ pipeline {
             echo *.bak* >> .gitignore
            """)
         }
+        sh 'cd /var/tmp/argo && gitpush.sh ${BUILD_NUMBER}'
       }
     }
   }
