@@ -1,13 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:       
-    notifications.argoproj.io/subscribe.on-sync-succeeded.slack: dk-devops
-    notifications.argoproj.io/subscribe.on-sync-failed.slack: dk-devops
-    notifications.argoproj.io/subscribe.on-sync-running.slack: dk-devops
-    notifications.argoproj.io/subscribe.on-sync-status-unknown.slack: dev-ops
-    notifications.argoproj.io/subscribe.on-deployed.slack: dk-devops
-    notifications.argoproj.io/subscribe.on-health-degraded.slack: dk-devops
   labels:
     app: nginx1
   name: nginx1
@@ -23,7 +16,7 @@ spec:
         app: nginx1
     spec:
       containers:
-      - image: harbor.tkg.io/library/docker-example:32
+      - image: harbor.tkg.io/library/docker-example:33
         name: docker-example
         resources: {}
 status: {}
