@@ -77,7 +77,7 @@ pipeline {
             git push origin \$GIT_TAG
            """)
         }
-        sh 'cd /var/tmp/argo && gitpush.sh ${BUILD_NUMBER}'
+        sh 'cd /var/tmp/argo && sh gitpush.sh ${BUILD_NUMBER}'
       }
     }
   }
