@@ -18,6 +18,7 @@ pipeline {
     dockerfile = '/var/tmp/argo/nginx/backend/Dockerfile'
     
     GIT_AUTH = credentials('github')
+    GIT_SSH = credentials('root')
   }
   agent any
   stages {
@@ -62,36 +63,34 @@ pipeline {
       } 
     }
     stage('Check File change') {
-      environment { 
+      environment {
         GIT_TAG = "jenkins-$BUILD_NUMBER"
-      }      
+      }
       steps {
         sh('''
-          git config user.name 'huntedhappy'
-          git config user.email 'huntedhappy@gmail.com'
+          git config --global user.name 'huntedhappy'
+          git config --global user.email 'huntedhappy@gmail.com'
           git tag -a \$GIT_TAG -m "[Jenkins CI] New Tag"
         ''')
-        
-        sshagent(['root']) {
+
+        sshagent(credentials: ['root']) {
           sh("""
             #!/usr/bin/env bash
             set +x
-            git remote rm origin
-            git remote add origin git@github.com:huntedhappy/argo.git        
             git push origin \$GIT_TAG
             echo *.bak* >> .gitignore
-            git clean -f -d -x                
+            git clean -fdx
            """)
         }
       }
     }
   }
   post {
-      success {
-          slackSend (channel: '#dk-devops', color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'")
-      }
-      failure {
-          slackSend (channel: '#dk-devops', color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'")
-      }
+    success {
+      slackSend (channel: '#dk-devops', color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'")
+    }
+    failure {
+      slackSend (channel: '#dk-devops', color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'")
+    }
   }    
 }
