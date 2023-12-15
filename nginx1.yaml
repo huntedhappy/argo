@@ -16,7 +16,7 @@ spec:
         app: nginx1
     spec:
       containers:
-      - image: harbor.tkg.io/library/docker-example:39
+      - image: harbor-infra.huntedhappy.kro.kr/library/nginx
         name: docker-example
         resources: {}
 status: {}
